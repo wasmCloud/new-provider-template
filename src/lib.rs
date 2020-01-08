@@ -21,7 +21,7 @@ const CAPABILITY_ID: &str = "new:provider"; // TODO: change this to your capabil
 pub struct {{project-name | capitalize }} {    
 }
 
-impl Default for {{project-name | captalize }} {
+impl Default for {{project-name | capitalize }} {
     fn default() -> Self {
         env_logger::init();
 
