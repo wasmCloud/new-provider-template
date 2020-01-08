@@ -14,23 +14,23 @@ use std::error::Error;
 use std::sync::Arc;
 use std::sync::RwLock;
 
-capability_provider!({{project-name | capitalize }}, {{project-name | capitalize }}::new);
+capability_provider!({{project-name | capitalize }}Provider, {{project-name | capitalize }}Provider::new);
 
 const CAPABILITY_ID: &str = "new:provider"; // TODO: change this to your capability ID
 
-pub struct {{project-name | capitalize }} {    
+pub struct {{project-name | capitalize }}Provider {    
 }
 
-impl Default for {{project-name | capitalize }} {
+impl Default for {{project-name | capitalize }}Provider {
     fn default() -> Self {
         env_logger::init();
 
-        {{project-name}} {            
+        {{project-name | capitalize}}Provider {            
         }
     }
 }
 
-impl {{project-name | capitalize}} {
+impl {{project-name | capitalize}}Provider {
     pub fn new() -> Self {
         Self::default()
     }
@@ -45,7 +45,7 @@ impl {{project-name | capitalize}} {
     }    
 }
 
-impl CapabilityProvider for {{project-name}} {
+impl CapabilityProvider for {{project-name | capitalize}}Provider {
     fn capability_id(&self) -> &'static str {
         CAPABILITY_ID
     }
