@@ -6,8 +6,7 @@ extern crate wascc_codec as codec;
 extern crate log;
 
 use codec::capabilities::{CapabilityProvider, Dispatcher, NullDispatcher};
-use codec::core::{OP_CONFIGURE};
-use std::collections::HashMap;
+use codec::core::OP_CONFIGURE;
 use wascc_codec::core::CapabilityConfiguration;
 
 use std::error::Error;
@@ -16,9 +15,10 @@ use std::sync::RwLock;
 
 capability_provider!({{project-name | capitalize }}Provider, {{project-name | capitalize }}Provider::new);
 
-const CAPABILITY_ID: &str = "new:provider"; // TODO: change this to your capability ID
+const CAPABILITY_ID: &str = "new:{{project-name}}"; // TODO: change this to an appropriate capability ID
 
-pub struct {{project-name | capitalize }}Provider {    
+pub struct {{project-name | capitalize }}Provider {
+    dispatcher: Arc<RwLock<Box<dyn Dispatcher>>>,
 }
 
 impl Default for {{project-name | capitalize }}Provider {
@@ -50,6 +50,8 @@ impl CapabilityProvider for {{project-name | capitalize}}Provider {
         CAPABILITY_ID
     }
 
+    // Invoked by the runtime host to give this provider plugin the ability to communicate
+    // with actors
     fn configure_dispatch(&self, dispatcher: Box<dyn Dispatcher>) -> Result<(), Box<dyn Error>> {
         trace!("Dispatcher received.");
         let mut lock = self.dispatcher.write().unwrap();
@@ -59,11 +61,13 @@ impl CapabilityProvider for {{project-name | capitalize}}Provider {
     }
 
     fn name(&self) -> &'static str {
-        "New Capability Provider"
+        "New {{ project-name | capitalize }} Capability Provider" // TODO: change this friendly name
     }
 
+    // Invoked by host runtime to allow an actor to make use of the capability
+    // All providers MUST handle the "configure" message, even if no work will be done
     fn handle_call(&self, actor: &str, op: &str, msg: &[u8]) -> Result<Vec<u8>, Box<dyn Error>> {
-        trace!("Received host call from {}, operation - {}", op, actor);
+        trace!("Received host call from {}, operation - {}", actor, op);
 
         match op {            
             OP_CONFIGURE if actor == "system" => self.configure(msg.to_vec().as_ref()),            
