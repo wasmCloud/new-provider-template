@@ -25,7 +25,8 @@ impl Default for {{project-name | capitalize }}Provider {
     fn default() -> Self {
         env_logger::init();
 
-        {{project-name | capitalize}}Provider {            
+        {{project-name | capitalize}}Provider { 
+            dispatcher: Arc::new(RwLock::new(Box::new(NullDispatcher::new()))),           
         }
     }
 }
