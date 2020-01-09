@@ -10,7 +10,6 @@ use codec::core::OP_CONFIGURE;
 use wascc_codec::core::CapabilityConfiguration;
 
 use std::error::Error;
-use std::sync::Arc;
 use std::sync::RwLock;
 
 capability_provider!({{project-name | capitalize }}Provider, {{project-name | capitalize }}Provider::new);
@@ -18,7 +17,7 @@ capability_provider!({{project-name | capitalize }}Provider, {{project-name | ca
 const CAPABILITY_ID: &str = "new:{{project-name}}"; // TODO: change this to an appropriate capability ID
 
 pub struct {{project-name | capitalize }}Provider {
-    dispatcher: Arc<RwLock<Box<dyn Dispatcher>>>,
+    dispatcher: RwLock<Box<dyn Dispatcher>>,
 }
 
 impl Default for {{project-name | capitalize }}Provider {
@@ -26,7 +25,7 @@ impl Default for {{project-name | capitalize }}Provider {
         env_logger::init();
 
         {{project-name | capitalize}}Provider { 
-            dispatcher: Arc::new(RwLock::new(Box::new(NullDispatcher::new()))),           
+            dispatcher: RwLock::new(Box::new(NullDispatcher::new())),           
         }
     }
 }
