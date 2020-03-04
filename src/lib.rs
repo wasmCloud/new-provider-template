@@ -12,25 +12,25 @@ use wascc_codec::core::CapabilityConfiguration;
 use std::error::Error;
 use std::sync::RwLock;
 
-capability_provider!({{project-name | capitalize }}Provider, {{project-name | capitalize }}Provider::new);
+capability_provider!({{project-name | pascal_case }}Provider, {{project-name | pascal_case }}Provider::new);
 
 const CAPABILITY_ID: &str = "new:{{project-name}}"; // TODO: change this to an appropriate capability ID
 
-pub struct {{project-name | capitalize }}Provider {
+pub struct {{project-name | pascal_case }}Provider {
     dispatcher: RwLock<Box<dyn Dispatcher>>,
 }
 
-impl Default for {{project-name | capitalize }}Provider {
+impl Default for {{project-name | pascal_case }}Provider {
     fn default() -> Self {
         env_logger::init();
 
-        {{project-name | capitalize}}Provider { 
+        {{project-name | pascal_case}}Provider { 
             dispatcher: RwLock::new(Box::new(NullDispatcher::new())),           
         }
     }
 }
 
-impl {{project-name | capitalize}}Provider {
+impl {{project-name | pascal_case}}Provider {
     pub fn new() -> Self {
         Self::default()
     }
@@ -45,7 +45,7 @@ impl {{project-name | capitalize}}Provider {
     }    
 }
 
-impl CapabilityProvider for {{project-name | capitalize}}Provider {
+impl CapabilityProvider for {{project-name | pascal_case}}Provider {
     fn capability_id(&self) -> &'static str {
         CAPABILITY_ID
     }
@@ -61,7 +61,7 @@ impl CapabilityProvider for {{project-name | capitalize}}Provider {
     }
 
     fn name(&self) -> &'static str {
-        "New {{ project-name | capitalize }} Capability Provider" // TODO: change this friendly name
+        "New {{ project-name | pascal_case }} Capability Provider" // TODO: change this friendly name
     }
 
     // Invoked by host runtime to allow an actor to make use of the capability
