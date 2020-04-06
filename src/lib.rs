@@ -12,6 +12,9 @@ use wascc_codec::core::CapabilityConfiguration;
 use std::error::Error;
 use std::sync::RwLock;
 
+const SYSTEM_ACTOR: &str = "system";
+
+#[cfg(not(feature = "static_plugin"))]
 capability_provider!({{project-name | pascal_case }}Provider, {{project-name | pascal_case }}Provider::new);
 
 const CAPABILITY_ID: &str = "new:{{project-name}}"; // TODO: change this to an appropriate capability ID
@@ -70,7 +73,7 @@ impl CapabilityProvider for {{project-name | pascal_case}}Provider {
         trace!("Received host call from {}, operation - {}", actor, op);
 
         match op {            
-            OP_CONFIGURE if actor == "system" => self.configure(msg.to_vec().as_ref()),            
+            OP_BIND_ACTOR if actor == SYSTEM_ACTOR => self.configure(msg.to_vec().as_ref()),            
             _ => Err("bad dispatch".into()),
         }
     }
