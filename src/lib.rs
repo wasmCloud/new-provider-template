@@ -6,7 +6,7 @@ extern crate wascc_codec as codec;
 extern crate log;
 
 use codec::capabilities::{CapabilityProvider, Dispatcher, NullDispatcher};
-use codec::core::OP_CONFIGURE;
+use codec::core::OP_BIND_ACTOR;
 use wascc_codec::core::CapabilityConfiguration;
 
 use std::error::Error;
