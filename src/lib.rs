@@ -6,8 +6,8 @@ extern crate wascc_codec as codec;
 extern crate log;
 
 use codec::capabilities::{CapabilityProvider, Dispatcher, NullDispatcher};
-use codec::core::OP_BIND_ACTOR;
-use wascc_codec::core::CapabilityConfiguration;
+use codec::core::{OP_BIND_ACTOR, CapabilityConfiguration};
+use codec::deserialize;
 
 use std::error::Error;
 use std::sync::RwLock;
@@ -25,7 +25,7 @@ pub struct {{project-name | pascal_case }}Provider {
 
 impl Default for {{project-name | pascal_case }}Provider {
     fn default() -> Self {
-        env_logger::init();
+        let _ = env_logger::try_init();
 
         {{project-name | pascal_case}}Provider { 
             dispatcher: RwLock::new(Box::new(NullDispatcher::new())),           
@@ -40,9 +40,10 @@ impl {{project-name | pascal_case}}Provider {
 
     fn configure(
         &self,
-        config: impl Into<CapabilityConfiguration>,
-    ) -> Result<Vec<u8>, Box<dyn Error>> {
-        let _config = config.into();
+        _config: CapabilityConfiguration,
+    ) -> Result<Vec<u8>, Box<dyn Error>> {        
+
+        // Handle actor binding metadata here...
 
         Ok(vec![])
     }    
@@ -73,7 +74,7 @@ impl CapabilityProvider for {{project-name | pascal_case}}Provider {
         trace!("Received host call from {}, operation - {}", actor, op);
 
         match op {            
-            OP_BIND_ACTOR if actor == SYSTEM_ACTOR => self.configure(msg.to_vec().as_ref()),            
+            OP_BIND_ACTOR if actor == SYSTEM_ACTOR => self.configure(deserialize(msg)?),            
             _ => Err("bad dispatch".into()),
         }
     }
