@@ -6,7 +6,7 @@ extern crate wascc_codec as codec;
 extern crate log;
 
 use codec::capabilities::{CapabilityProvider, Dispatcher, NullDispatcher};
-use codec::core::{OP_BIND_ACTOR, CapabilityConfiguration};
+use codec::core::{OP_BIND_ACTOR, OP_REMOVE_ACTOR, CapabilityConfiguration};
 use codec::deserialize;
 
 use std::error::Error;
@@ -44,9 +44,21 @@ impl {{project-name | pascal_case}}Provider {
     ) -> Result<Vec<u8>, Box<dyn Error>> {        
 
         // Handle actor binding metadata here...
+        // This is typically where you would establish a
+        // client or connection to a resource on behalf of
+        // an actor
 
         Ok(vec![])
-    }    
+    }   
+    
+    fn deconfigure(
+        &self,
+        _config: CapabilityConfiguration,        
+    ) -> Result<Vec<u8>, Box<dyn Error>> {
+
+        // Handle removal of resources claimed by an actor here
+        Ok(vec![])
+    }
 }
 
 impl CapabilityProvider for {{project-name | pascal_case}}Provider {
@@ -74,7 +86,8 @@ impl CapabilityProvider for {{project-name | pascal_case}}Provider {
         trace!("Received host call from {}, operation - {}", actor, op);
 
         match op {            
-            OP_BIND_ACTOR if actor == SYSTEM_ACTOR => self.configure(deserialize(msg)?),            
+            OP_BIND_ACTOR if actor == SYSTEM_ACTOR => self.configure(deserialize(msg)?),
+            OP_REMOVE_ACTOR if actor == SYSTEM_ACTOR => self.deconfigure(deserialize(msg)?),
             _ => Err("bad dispatch".into()),
         }
     }
