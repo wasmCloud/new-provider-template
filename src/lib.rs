@@ -77,11 +77,7 @@ impl {{project-name | pascal_case}}Provider {
     }
 }
 
-impl CapabilityProvider for {{project-name | pascal_case}}Provider {
-    fn capability_id(&self) -> &'static str {
-        CAPABILITY_ID
-    }
-
+impl CapabilityProvider for {{project-name | pascal_case}}Provider {    
     // Invoked by the runtime host to give this provider plugin the ability to communicate
     // with actors
     fn configure_dispatch(&self, dispatcher: Box<dyn Dispatcher>) -> Result<(), Box<dyn Error>> {
@@ -91,11 +87,7 @@ impl CapabilityProvider for {{project-name | pascal_case}}Provider {
 
         Ok(())
     }
-
-    fn name(&self) -> &'static str {
-        "New {{ project-name | pascal_case }} Capability Provider" // TODO: change this friendly name
-    }
-
+    
     // Invoked by host runtime to allow an actor to make use of the capability
     // All providers MUST handle the "configure" message, even if no work will be done
     fn handle_call(&self, actor: &str, op: &str, msg: &[u8]) -> Result<Vec<u8>, Box<dyn Error>> {
