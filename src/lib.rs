@@ -63,6 +63,7 @@ impl {{project-name | pascal_case}}Provider {
         Ok(vec![])
     }
 
+    // Capability providers must provide a descriptor to the host containing metadata and a list of supported operations
     fn get_descriptor(&self) -> Result<Vec<u8>, Box<dyn Error>> {
         Ok(serialize(
             CapabilityDescriptor::builder()
